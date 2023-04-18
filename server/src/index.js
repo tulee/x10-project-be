@@ -15,8 +15,6 @@ route(app)
 const database = require('./config/db/index');
 const db = new database();
 
-console.log(process.env.ACCESS_TOKEN_LIFE);
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App listenting on port ${port}`);

@@ -6,6 +6,11 @@ class DotTuyenDung_ViTriModel extends BaseModel {
         super()
         this.init("dot-tuyen-dung_vi-tri", DotTuyenDung_ViTriSchema, "dot-tuyen-dung_vi-tri");
     }
+
+    // async getDotTuyenDung_ViTriByInfo(info){
+    //     const query = this.model.findOne(info);
+    //     return query.exec();
+    // }
 }
 
 module.exports = new DotTuyenDung_ViTriModel();

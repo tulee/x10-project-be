@@ -6,6 +6,11 @@ class YeuCauUngTuyenModel extends BaseModel {
         super()
         this.init("yeu-cau-ung-tuyen", YeuCauUngTuyenSchema, "yeu-cau-ung-tuyen");
     }
+
+    // async getYeuCauUngTuyenByInfo(info){
+    //     const query = this.model.findOne(info);
+    //     return query.exec();
+    // }
 }
 
 module.exports = new YeuCauUngTuyenModel();

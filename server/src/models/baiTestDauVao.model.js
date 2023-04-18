@@ -1,33 +1,50 @@
 const mongoose = require('mongoose');
 const BaseModel = require('./base.model');
-const DotTuyenDungSchema = require('./schemas/dotTuyenDung.schema');
-class DotTuyenDungModel extends BaseModel {
+const BaiTestDauVaoSchema = require('./schemas/baiTestDauVao.schema');
+class BaiTestDauVaoModel extends BaseModel {
     constructor(){
         super()
-        this.init("dot-tuyen-dung", DotTuyenDungSchema, "dot-tuyen-dung");
+        this.init("bai-test-dau-vao", BaiTestDauVaoSchema, "bai-test-dau-vao");
     }
 
-    async getDotTuyenDung(term, page, perPage){
-        const agg = [{
+    async getBaiTest(term, viTri,page, perPage){
+        const agg = [
+          {
             '$match': {
-              'ten': {
+              'ten_bai_test': {
                 '$regex': '', 
                 '$options': 'i'
               }
             }
-          }]
+          }
+        ]
         const aggTerm = 
             {
               '$match': {
-                'ten': {
+                'ten_bai_test': {
                   '$regex': term, 
                   '$options': 'i'
                 }
               }
             }
         
+        const aggViTri = 
+            {
+                '$match': {
+                  '$expr': {
+                    '$in': [
+                      new mongoose.Types.ObjectId(viTri), '$vi_tri'
+                    ]
+                  }
+                }
+              }
+        
         if(term && term != ""){
             agg.push(aggTerm)
+        }
+
+        if(viTri && viTri != ""){
+            agg.push(aggViTri)
         }
 
         let danhsach = await this.model
@@ -41,4 +58,4 @@ class DotTuyenDungModel extends BaseModel {
     }
 }
 
-module.exports = new DotTuyenDungModel();
+module.exports = new BaiTestDauVaoModel();

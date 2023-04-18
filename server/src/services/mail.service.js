@@ -34,7 +34,6 @@ class MailService {
 
                 transporter.sendMail(mailOptions, (err, info) => {
                     if(err){
-                        console.log(err)
                         resolve(false)
                     }
                     console.log("Info: ", info);

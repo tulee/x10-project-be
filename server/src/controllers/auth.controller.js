@@ -96,7 +96,6 @@ class AuthController {
         return res.send({status:"false", message:"Không tìm thấy refresh token"})
       }
 
-      console.log(refreshTokenFromBody);
 
       const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
       const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || jwtVariable.accessTokenLife;
@@ -117,7 +116,6 @@ class AuthController {
         res.send({status:"false", message:"User không tồn tại"})
       }
 
-      console.log(cbnv);
 
       if (refreshTokenFromBody !== cbnv.refreshToken) {
         return res.send({status:"false", message:"Refresh token không hợp lệ"});

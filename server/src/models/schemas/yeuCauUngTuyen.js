@@ -4,7 +4,7 @@ const YeuCauUngTuyenSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
-    id_bai_test:String,
+    id_bai_test:mongoose.Types.ObjectId,
     id_ung_vien:{
         type: mongoose.Types.ObjectId,
         required: true
