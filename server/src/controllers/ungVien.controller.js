@@ -8,7 +8,8 @@ class UngVienController {
   constructor() {}
 
   ungTuyen = async (req, res) => {
-    const thongTinUngTuyen = req.body    
+    try {
+      const thongTinUngTuyen = req.body    
     if(!thongTinUngTuyen.ho_va_ten || !thongTinUngTuyen.email || !thongTinUngTuyen.id_dot_tuyen_dung || !thongTinUngTuyen.id_vi_tri){
       res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
     } else {
@@ -26,9 +27,13 @@ class UngVienController {
         id_vi_tri:new mongoose.Types.ObjectId(thongTinUngTuyen.id_vi_tri)
       })
 
-      console.log(dot_tuyen_dung_vi_tri);
+      let id_dot_tuyen_dung_vi_tri
 
-      let id_dot_tuyen_dung_vi_tri = dot_tuyen_dung_vi_tri._id
+      try {
+        id_dot_tuyen_dung_vi_tri = dot_tuyen_dung_vi_tri._id
+      } catch (err){
+        throw err
+      }
 
       if(!id_dot_tuyen_dung_vi_tri){
         res.send({status:"false", message:"Đợt tuyển dụng không có vị trí này"})
@@ -84,6 +89,10 @@ class UngVienController {
             }
         } 
       }
+    }
+    } catch (error) {
+      console.log(error);
+      res.send({status:"false", message:"Lỗi khi ứng tuyển"})
     }
   }
   }
