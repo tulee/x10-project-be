@@ -17,6 +17,7 @@ const UngVienSchema = new mongoose.Schema({
         required: true
     },
     nam_sinh:String,
-    trang_thai:String
+    trang_thai:String,
+    cv:String
 })
 module.exports = UngVienSchema

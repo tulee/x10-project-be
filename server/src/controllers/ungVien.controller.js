@@ -3,23 +3,34 @@ const dotTuyenDungModel = require('../models/dotTuyenDung.model');
 const yeuCauUngTuyenModel = require('../models/yeuCauUngTuyen.model');
 const dotTuyenDung_ViTriModel = require('../models/dotTuyenDung_ViTri.model');
 const { default: mongoose, model } = require("mongoose");
+const cloudinary = require('cloudinary').v2;
 
 class UngVienController {
   constructor() {}
 
-  ungTuyen = async (req, res) => {
+  ungTuyen = async (req, res, next) => {
     try {
-      const thongTinUngTuyen = req.body    
-    if(!thongTinUngTuyen.ho_va_ten || !thongTinUngTuyen.email || !thongTinUngTuyen.id_dot_tuyen_dung || !thongTinUngTuyen.id_vi_tri){
-      res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
-    } else {
+      const thongTinUngTuyen = req.body  
+      console.log(req.file.filename);
+      let filename = req.file.filename  
+      if(!thongTinUngTuyen.ho_va_ten || !thongTinUngTuyen.email || !thongTinUngTuyen.id_dot_tuyen_dung || !thongTinUngTuyen.id_vi_tri || !req.file){
+        if(filename){
+          cloudinary.uploader.destroy(filename).then(
+            res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
+          );
+        }else {
+          res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
+        }
+        
+      } else {
       let thongTinUngVien = {
         ho_va_ten: thongTinUngTuyen.ho_va_ten,
         gioi_tinh:thongTinUngTuyen.gioi_tinh,
         nam_sinh:thongTinUngTuyen.nam_sinh,
         email:thongTinUngTuyen.email,
         sdt:thongTinUngTuyen.sdt,
-        trang_thai:"Đang ứng tuyển"
+        trang_thai:"Đang ứng tuyển",
+        cv:req.file.path
       }
 
       let dot_tuyen_dung_vi_tri = await dotTuyenDung_ViTriModel.getByInfo({
@@ -36,12 +47,16 @@ class UngVienController {
       }
 
       if(!id_dot_tuyen_dung_vi_tri){
-        res.send({status:"false", message:"Đợt tuyển dụng không có vị trí này"})
+        cloudinary.uploader.destroy(filename).then(
+          res.send({status:"false", message:"Đợt tuyển dụng không có vị trí này"})
+        );
       } else {
         let dotTuyenDung = await dotTuyenDungModel.getById(thongTinUngTuyen.id_dot_tuyen_dung)
 
         if(dotTuyenDung.ngay_ket_thuc < new Date()){
-          res.send({status:"false", message:"Đợt tuyển dụng đã kết thúc"})
+          cloudinary.uploader.destroy(filename).then(
+            res.send({status:"false", message:"Đợt tuyển dụng đã kết thúc"})
+          );
         } else {
           let thongTinYeuCauUngTuyen = {
             id_dot_tuyen_dung_vi_tri:id_dot_tuyen_dung_vi_tri,
@@ -53,7 +68,7 @@ class UngVienController {
             thoi_gian_pv:null,
             nguoi_pv:null,
             ket_qua_pv:null,
-            ngay_nhan_viec:null
+            ngay_nhan_viec:null,
           }
     
           let checkExistingUngVien = await ungVienModel.getByInfo({
@@ -73,18 +88,28 @@ class UngVienController {
         
               thongTinYeuCauUngTuyen.id_ung_vien = checkExistingUngVien._id
               
-              let result
+              let result = {
+                ungVien:checkExistingUngVien
+              }
   
               if(checkExistingYeuCauUngTuyen){
                 await yeuCauUngTuyenModel.update(checkExistingYeuCauUngTuyen._id, thongTinYeuCauUngTuyen)
-                result = await yeuCauUngTuyenModel.getById(checkExistingYeuCauUngTuyen._id)
+                let newYeuCauUngTuyen = await yeuCauUngTuyenModel.getById(checkExistingYeuCauUngTuyen._id)
+                result.yeuCauUngTuyen = newYeuCauUngTuyen
                 res.send({status:"true", messgae:"Ứng tuyển thành công", data: result})
               } else {
-                result = await yeuCauUngTuyenModel.create(thongTinYeuCauUngTuyen)
+                let newYeuCauUngTuyen = await yeuCauUngTuyenModel.create(thongTinYeuCauUngTuyen)
+                result.yeuCauUngTuyen = newYeuCauUngTuyen
                 res.send({status:"true", messgae:"Ứng tuyển thành công", data: result})
               }
             } else {
-              let result = await ungVienModel.create(thongTinUngVien)
+              let newUngVien = await ungVienModel.create(thongTinUngVien)
+              thongTinYeuCauUngTuyen.id_ung_vien = newUngVien._id
+              let newYeuCauUngTuyen = await yeuCauUngTuyenModel.create(thongTinYeuCauUngTuyen)
+              result = {
+                ungVien:newUngVien,
+                yeuCauUngTuyen:newYeuCauUngTuyen
+              }
               res.send({status:"true", messgae:"Ứng tuyển thành công", data: result})
             }
         } 
@@ -92,7 +117,9 @@ class UngVienController {
     }
     } catch (error) {
       console.log(error);
-      res.send({status:"false", message:"Lỗi khi ứng tuyển"})
+      cloudinary.uploader.destroy(filename).then(
+        res.send({status:"false", message:"Lỗi khi ứng tuyển"})
+      );
     }
   }
   }
