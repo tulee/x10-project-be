@@ -33,7 +33,7 @@ class UngVienController {
         cv:req.file.path
       }
 
-      let dot_tuyen_dung_vi_tri = await dotTuyenDung_ViTriModel.getByInfo({
+      let dot_tuyen_dung_vi_tri = await dotTuyenDung_ViTriModel.getOneByInfo({
         id_dot_tuyen_dung: new mongoose.Types.ObjectId(thongTinUngTuyen.id_dot_tuyen_dung),
         id_vi_tri:new mongoose.Types.ObjectId(thongTinUngTuyen.id_vi_tri)
       })
@@ -71,7 +71,7 @@ class UngVienController {
             ngay_nhan_viec:null,
           }
     
-          let checkExistingUngVien = await ungVienModel.getByInfo({
+          let checkExistingUngVien = await ungVienModel.getOneByInfo({
             ho_va_ten:thongTinUngTuyen.ho_va_ten,
             email:thongTinUngTuyen.email
           })
@@ -81,7 +81,7 @@ class UngVienController {
           if(checkExistingUngVien){
               await ungVienModel.update(checkExistingUngVien._id,thongTinUngVien)
       
-              let checkExistingYeuCauUngTuyen = await yeuCauUngTuyenModel.getByInfo({
+              let checkExistingYeuCauUngTuyen = await yeuCauUngTuyenModel.getOneByInfo({
                 id_dot_tuyen_dung_vi_tri:id_dot_tuyen_dung_vi_tri,
                 id_ung_vien:checkExistingUngVien._id
               })

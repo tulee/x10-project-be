@@ -19,8 +19,13 @@ class BaseModel {
     return query.exec();
   }
 
-  async getByInfo(info){
+  async getOneByInfo(info){
     let query = this.model.findOne(info);
+    return query.exec();
+  }
+
+  async getAllByInfo(info){
+    let query = this.model.find(info);
     return query.exec();
   }
 
