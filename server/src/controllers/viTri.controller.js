@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const viTriModel = require('../models/viTri.model');
 const { default: mongoose } = require("mongoose");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class ViTriController {
     constructor() {}
@@ -51,6 +52,39 @@ class ViTriController {
             errorMsg : error.message
           }, message:"Lỗi khi tạo bài test"})
           return
+      }
+    }
+
+    deleteViTri = async (req, res) => {
+      try {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi xóa vị trí" });
+          return
+        }
+
+        let id = req.body.id
+        if(!ObjectId.isValid(id)){
+          res.status(400).json({status:"false",data:[{
+            type: "field",
+            value: id,
+            msg: "Id phải ở định dạng Mongo Object Id",
+            path: "id",
+            location: "body"
+          }], message:"Id phải ở định dạng Mongo Object Id"})
+          return
+        }
+
+        let result = await viTriModel.delete(id)
+        res.status(200).json({status:"true", data:result, message:"Xóa vị trí thành công"})
+        return
+      } catch (error) {
+        console.log(error);
+        res.status(400).json({status:"false",data:{
+          errorName: error.name,
+          errorMsg : error.message
+        }, message:"Lỗi khi xóa vị trí"})
+        return
       }
     }
   }

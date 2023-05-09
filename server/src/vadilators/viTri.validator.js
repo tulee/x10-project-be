@@ -7,9 +7,16 @@ let validateCreateViTri = () => {
     ]; 
 }
 
+let validateDeleteViTri = () => {
+    return [
+        check('id', 'Thiếu id vị trí').not().isEmpty()
+    ]
+}
+
 
 let validateViTri = {
     validateCreateViTri: validateCreateViTri,
+    validateDeleteViTri:validateDeleteViTri
 };
   
 module.exports = {validateViTri};

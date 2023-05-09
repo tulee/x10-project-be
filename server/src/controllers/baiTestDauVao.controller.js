@@ -48,7 +48,7 @@ class BaiTestDauVaoController {
       try {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi tạo bài test" });
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi xóa bài test" });
           return
         }
 
