@@ -10,7 +10,7 @@ const uploadRouter = require('./cloudinary.route');
 const isAuth = authMiddleware.isAuth;
 
 function route(app){
-    app.use('/vitri',isAuth,viTriRouter)
+    app.use('/vitri',viTriRouter)
     app.use('/mail',isAuth,mailRouter)
     app.use('/auth',authRouter)
     app.use('/yeucauungtuyen',yeuCauUngTuyenRouter)
