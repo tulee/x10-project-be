@@ -8,53 +8,58 @@ class BaiTestDauVaoModel extends BaseModel {
     }
 
     async getBaiTest(term, viTri,page, perPage){
-        const agg = [
-          {
-            '$match': {
-              'ten_bai_test': {
-                '$regex': '', 
-                '$options': 'i'
-              }
-            }
-          }
-        ]
-        const aggTerm = 
+        try {
+          const agg = [
             {
               '$match': {
                 'ten_bai_test': {
-                  '$regex': term, 
+                  '$regex': '', 
                   '$options': 'i'
                 }
               }
             }
-        
-        const aggViTri = 
-            {
+          ]
+          const aggTerm = 
+              {
                 '$match': {
-                  '$expr': {
-                    '$in': [
-                      new mongoose.Types.ObjectId(viTri), '$vi_tri'
-                    ]
+                  'ten_bai_test': {
+                    '$regex': term, 
+                    '$options': 'i'
                   }
                 }
               }
-        
-        if(term && term != ""){
-            agg.push(aggTerm)
+          
+          const aggViTri = 
+              {
+                  '$match': {
+                    '$expr': {
+                      '$in': [
+                        new mongoose.Types.ObjectId(viTri), '$vi_tri'
+                      ]
+                    }
+                  }
+                }
+          
+          if(term && term != ""){
+              agg.push(aggTerm)
+          }
+  
+          if(viTri && viTri != ""){
+              agg.push(aggViTri)
+          }
+  
+          let danhsach = await this.model
+                                  .aggregate(agg)
+                                  .exec()
+          let totalPages = Math.ceil(danhsach.length/perPage)
+          let start = (perPage * page) - perPage
+          let end = start + perPage    
+          danhsach = danhsach.slice(start, end)
+          return {currentPage: page, totalPages: totalPages, danhsach:danhsach}
+        } catch (error) {
+         throw error
+         return
         }
-
-        if(viTri && viTri != ""){
-            agg.push(aggViTri)
-        }
-
-        let danhsach = await this.model
-                                .aggregate(agg)
-                                .exec()
-        let totalPages = Math.ceil(danhsach.length/perPage)
-        let start = (perPage * page) - perPage
-        let end = start + perPage    
-        danhsach = danhsach.slice(start, end)
-        return {currentPage: page, totalPages: totalPages, danhsach:danhsach}
     }
 
     async danhSachCauHoi (idBaiTest){

@@ -15,13 +15,18 @@ class BaiTestDauVaoController {
           let page = req.query.page || 1; 
           let result = await model.getBaiTest(term,viTri,page, perPage)
           if(result.totalPages>0){
-            res.send({status:"true", data: result, message:"Tìm bài test thành công"})
+            return res.send({status:"true", data: result, message:"Tìm danh sách bài test thành công"})
           } else {
-            res.send({status:"false", message:"Không tìm thấy bài test"})
+            res.status(404).json({status:"false", message:"Không tìm thấy danh sách bài test"})
+            return
           }         
         } catch (error) {
           console.log(error);
-          res.send({status:"false", message:"Lỗi khi tìm bài test"})
+          res.status(408).json({status:"false",data:{
+            errorName: error.name,
+            errorMsg : error.message
+          }, message:"Lỗi khi tìm danh sách bài test"})
+          return
         }
   }
 
