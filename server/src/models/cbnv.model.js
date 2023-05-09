@@ -13,9 +13,11 @@ class CbnvModel extends BaseModel {
     }
 
     async updateCbnvByUsername(username, data){
-        let cbnv = await this.getCbnvByUsername(username)
-        let query = this.update(cbnv._id, data)
-        return query.exec()
+        this.getCbnvByUsername(username).then(cbnv => {
+            let query = this.update(cbnv._id, data)
+            console.log(query);
+            return query.exec() 
+        })        
     }
 }
 
