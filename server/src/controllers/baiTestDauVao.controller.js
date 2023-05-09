@@ -115,8 +115,7 @@ class BaiTestDauVaoController {
         try {
           let term = req.query.term
           let viTri = req.query.vitri
-
-          if(viTri || vitri !=""){
+          if(viTri){
             if(!ObjectId.isValid(viTri)){
               res.status(400).json({status:"false",data:[{
                 type: "field",

@@ -35,7 +35,12 @@ class BaiTestDauVaoModel extends BaseModel {
                 }
               }
           
-          const aggViTri = 
+          if(term && term != ""){
+              agg.push(aggTerm)
+          }
+          
+          if(viTri && viTri != ""){
+            const aggViTri = 
               {
                   '$match': {
                     '$expr': {
@@ -45,13 +50,7 @@ class BaiTestDauVaoModel extends BaseModel {
                     }
                   }
                 }
-          
-          if(term && term != ""){
-              agg.push(aggTerm)
-          }
-  
-          if(viTri && viTri != ""){
-              agg.push(aggViTri)
+            agg.push(aggViTri)
           }
   
           let danhsach = await this.model
