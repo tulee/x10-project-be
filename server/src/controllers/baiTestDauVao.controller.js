@@ -3,10 +3,34 @@ const ungVienModel = require('../models/ungVien.model');
 const yeuCauUngTuyenModel = require('../models/yeuCauUngTuyen.model');
 const model = require('../models/baiTestDauVao.model');
 const { default: mongoose } = require("mongoose");
+const { validationResult } = require('express-validator');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 class BaiTestDauVaoController {
     constructor() {}
+
+    createBaiTest = async(req,res) => {
+      try {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi tạo bài test" });
+          return
+        }
+
+        let data = req.body
+        let result = baiTestDauVaoModel.create(data)
+
+        res.status(200).json({status:"true", data:result, message:"Tạo bài test thành công"})
+        return
+      } catch (error) {
+        console.log(error);
+          res.status(400).json({status:"false",data:{
+            errorName: error.name,
+            errorMsg : error.message
+          }, message:"Lỗi khi tạo bài test"})
+          return
+      }
+    }
 
     getBaiTest = async (req, res) => {
         try {

@@ -15,6 +15,7 @@ const BaiTestDauVaoSchema = new mongoose.Schema({
     mo_ta:String,
     ngay_tao_bai_test:Date,
     ngay_chinh_sua_gan_nhat:Date,
-    so_diem_toi_thieu:Number
+    so_diem_toi_thieu:Number,
+    vi_tri:[mongoose.Types.ObjectId]
 })
 module.exports = BaiTestDauVaoSchema
