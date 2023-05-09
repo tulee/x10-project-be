@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 class ViTriController {
     constructor() {}
 
-    getAllViTri = async (req, res) => {
+    getViTri = async (req, res) => {
         let result = await model.getAll()
         res.send(result)
     }

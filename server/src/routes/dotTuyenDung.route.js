@@ -6,6 +6,6 @@ const { validateDotTuyenDung } = require("../vadilators/dotTuyenDung.validator")
 router.get('/danhsachungvien', controller.getDanhSachUngVienDotTuyenDung);
 router.post('/',validateDotTuyenDung.validateCreateDotTuyenDung(), controller.createDotTuyenDung);
 router.get('/', controller.getDotTuyenDung);
-router.put('/', controller.updateDotTuyenDung);
+router.put('/',validateDotTuyenDung.validateUpdateDotTuyenDung(), controller.updateDotTuyenDung);
 
 module.exports = router;

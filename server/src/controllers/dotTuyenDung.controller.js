@@ -61,7 +61,7 @@ class DotTuyenDungController {
       const errors = validationResult(req);
 
       if(!errors.isEmpty()){
-        res.status(422).json({ errors: errors.array() });
+        res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi tạo đợt tuyển dụng" });
         return
       } else {
         let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
@@ -119,13 +119,17 @@ class DotTuyenDungController {
       try {
         let data = req.body
 
-        if(!data.ten || !data.ngay_bat_dau || !data.ngay_ket_thuc){
-          res.send({status:"false", message:"Thiếu thông tin đợt tuyển dụng"})
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi cập nhật đợt tuyển dụng" });
+          return
         } else {
           let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
 
           if(new Date(data.ngay_bat_dau) <= new Date(ngay_ket_thuc_gan_nhat)){
-            res.send({status:"false", message:"Đợt tuyển dụng trước chưa kết thúc"})
+            res.status(400).json({status:"false", message:`Đợt tuyển dụng trước chưa kết thúc, ngày kết thúc gần nhất là: ${ngay_ket_thuc_gan_nhat}`})
+            return
           } else {
             
             let updatedData = {
@@ -137,20 +141,21 @@ class DotTuyenDungController {
             }
 
             try {
-              let updateResult = await dotTuyenDungModel.update(data._id, updatedData)
-              console.log(updateResult);
+              let updateResult = await dotTuyenDungModel.update(data.idDotTuyenDung, updatedData)
+              res.send({status:"true", data:updateResult, message:"Cập nhật đợt tuyển dụng thành công"})   
             } catch (error) {
               throw error
-            }
-
-            res.send({status:"true", message:"Cập nhật đợt tuyển dụng thành công"})
-            
+            }        
           }
         }
 
       } catch (error) {
         console.log(error);
-        res.send({status:"false", message:"Lỗi khi cập nhật đợt tuyển dụng"})
+          res.status(400).json({status:"false",data:{
+            errorName: error.name,
+            errorMsg : error.message
+          }, message:"Lỗi khi cập nhật đợt tuyển dụng"})
+        return
       }
     }
 
