@@ -86,7 +86,7 @@ class AuthController {
             msg: "Mật khẩu không chính xác",
             path: "password",
             location: "body"
-          }], message:"Lỗi khi đăng nhập"})
+          }], message:"Mật khẩu không chính xác"})
           
           return
         }

@@ -3,6 +3,7 @@ const ungVienModel = require('../models/ungVien.model');
 const yeuCauUngTuyenModel = require('../models/yeuCauUngTuyen.model');
 const model = require('../models/baiTestDauVao.model');
 const { default: mongoose } = require("mongoose");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class BaiTestDauVaoController {
     constructor() {}
@@ -11,6 +12,14 @@ class BaiTestDauVaoController {
         try {
           let term = req.query.term
           let viTri = req.query.vitri
+
+          if(viTri || vitri !=""){
+            if(!ObjectId.isValid(viTri)){
+              res.status(400).json({status:"false", message:"vitri phải thuộc định dạng Mongo Object ID"})
+              return
+            }
+          }
+
           let perPage = 3;
           let page = req.query.page || 1; 
           let result = await model.getBaiTest(term,viTri,page, perPage)
@@ -22,7 +31,7 @@ class BaiTestDauVaoController {
           }         
         } catch (error) {
           console.log(error);
-          res.status(408).json({status:"false",data:{
+          res.status(400).json({status:"false",data:{
             errorName: error.name,
             errorMsg : error.message
           }, message:"Lỗi khi tìm danh sách bài test"})
