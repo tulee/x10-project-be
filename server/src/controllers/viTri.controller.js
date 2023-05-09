@@ -87,6 +87,40 @@ class ViTriController {
         return
       }
     }
+
+    updateViTri = async (req, res) => {
+      try {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi cập nhật vị trí" });
+          return
+        }
+
+        let id = req.body.id
+        let data = req.body.data
+        if(!ObjectId.isValid(id)){
+          res.status(400).json({status:"false",data:[{
+            type: "field",
+            value: id,
+            msg: "Id phải ở định dạng Mongo Object Id",
+            path: "id",
+            location: "body"
+          }], message:"Id phải ở định dạng Mongo Object Id"})
+          return
+        }
+
+        let result = await viTriModel.update(id, data)
+        res.status(200).json({status:"true", data:result, message:"Cập nhật vị trí thành công"})
+        return
+      } catch (error) {
+        console.log(error);
+            res.status(400).json({status:"false",data:{
+              errorName: error.name,
+              errorMsg : error.message
+            }, message:"Lỗi khi cập nhật vị trí"})
+            return
+      }
+    }
   }
 
 module.exports = new ViTriController();
