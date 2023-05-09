@@ -134,16 +134,20 @@ class DotTuyenDungModel extends BaseModel {
             }
           }  
         ]
+        
   
-        const aggViTri = 
+        if(idViTri && idViTri != ""){
+          const aggViTri = 
           {
             '$match': {
               'ung_vien.id_vi_tri': new mongoose.Types.ObjectId(idViTri)
             }
           }  
-        
+          agg.push(aggViTri)
+        }
   
-        const aggTerm = 
+        if(term && term != ""){
+          const aggTerm = 
           {
             '$match': {
               '$or': [
@@ -166,13 +170,7 @@ class DotTuyenDungModel extends BaseModel {
               ]
             }
           }
-        
-  
-        if(idViTri && idViTri != ""){
-          agg.push(aggViTri)
-        }
-  
-        if(term && term != ""){
+          
           agg.push(aggTerm)
         }
 

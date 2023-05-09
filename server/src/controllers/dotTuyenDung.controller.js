@@ -27,7 +27,8 @@ class DotTuyenDungController {
         let page = req.query.page || 1; 
 
         if(!idDotTuyenDung){
-          return res.send({status:"false", message:"Thiếu thông tin đợt tuyển dụng"})
+          res.status(400).json({status:"false", message:"Thiếu id đợt tuyển dụng"})
+          return
         }
 
         try {
@@ -36,7 +37,8 @@ class DotTuyenDungController {
           if(result.totalPages>0){
             return res.send({status:"true", data: result, message:"Tìm danh sách ứng viên thành công"})
           } else {
-            return res.send({status:"false", message:"Không tìm thấy danh sách ứng viên"})
+            res.status(400).json({status:"false", message:"Không tìm thấy danh sách ứng viên"})
+            return
           }
 
         } catch (error) {
@@ -44,7 +46,11 @@ class DotTuyenDungController {
         }
       } catch (error) {
         console.log(error);
-        return res.send({status:"false", message:"Lỗi khi tìm danh sách ứng viên"})
+          res.status(400).json({status:"false",data:{
+            errorName: error.name,
+            errorMsg : error.message
+          }, message:"Lỗi khi tìm danh sách ứng viên"})
+        return
       }
     }
 
