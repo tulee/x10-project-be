@@ -150,11 +150,17 @@ class BaiTestDauVaoController {
   getDanhSachCauHoi = async (req,res) => {
     try {
       let idBaiTest = req.query.idbaitest
-
       if(!idBaiTest){
-        return res.send({status:"false", message:"Thiếu id bài test"})
+        res.status(400).json({status:"false",data:[{
+          type: "query",
+          value: idBaiTest,
+          msg: "Thiếu id bài test",
+          path: "idbaitest",
+          location: "param"
+        }], message:"Thiếu id bài test"})
+        return
       }
-
+      
       let result
 
       try {
@@ -166,7 +172,11 @@ class BaiTestDauVaoController {
       return res.send({status:"true", data:result, message:"Lấy danh sách câu hỏi thành công"})
     } catch (error) {
       console.log(error);
-      return res.send({status:"false", message:"Lỗi khi tìm danh sách câu hỏi"})
+      res.status(400).json({status:"false",data:{
+        errorName: error.name,
+        errorMsg : error.message
+      }, message:"Lỗi khi tìm danh sách câu hỏi"})
+      return
     }
   }
 
