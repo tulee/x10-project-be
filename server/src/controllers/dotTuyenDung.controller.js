@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const dotTuyenDungModel = require('../models/dotTuyenDung.model');
 const dotTuyenDung_ViTriModel = require('../models/dotTuyenDung_ViTri.model');
+const { validationResult } = require("express-validator");
 
 class DotTuyenDungController {
     constructor() {}
@@ -49,14 +50,19 @@ class DotTuyenDungController {
 
     createDotTuyenDung = async (req,res) => {
       try {
-        let data = req.body
+      let data = req.body
 
-      if(!data.ten || !data.ngay_bat_dau || !data.ngay_ket_thuc){
-        res.send({status:"false", message:"Thiếu thông tin đợt tuyển dụng"})
+      const errors = validationResult(req);
+
+      if(!errors.isEmpty()){
+        res.status(422).json({ errors: errors.array() });
+        return
+        // res.send({status:"false", message:"Thiếu thông tin đợt tuyển dụng"})
       } else {
         let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
         if(new Date(data.ngay_bat_dau) <= new Date(ngay_ket_thuc_gan_nhat)){
-          res.send({status:"false", message:"Đợt tuyển dụng trước chưa kết thúc"})
+          res.status(400).json({status:"false", message:`Đợt tuyển dụng trước chưa kết thúc, ngày kết thúc gần nhất là: ${ngay_ket_thuc_gan_nhat}`})
+          return
         } else {
           let newDotTuyenDung = {
             ten:data.ten,
