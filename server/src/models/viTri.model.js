@@ -7,6 +7,11 @@ class ViTriModel extends BaseModel {
         this.init("vi-tri", ViTriSchema, "vi-tri");
     }
 
+    async getViTriByMaViTri(ma_vi_tri){
+      const query = this.model.findOne({ma_vi_tri: ma_vi_tri});
+      return query.exec();
+    }
+
     async getViTri(term, page, perPage){
         try {
           const agg = [

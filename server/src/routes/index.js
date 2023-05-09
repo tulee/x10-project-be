@@ -11,7 +11,7 @@ const isAuth = authMiddleware.isAuth;
 
 function route(app){
     app.use('/vitri',viTriRouter)
-    app.use('/mail',isAuth,mailRouter)
+    app.use('/mail',mailRouter)
     app.use('/auth',authRouter)
     app.use('/yeucauungtuyen',yeuCauUngTuyenRouter)
     app.use('/baitest',baiTestDauVaoRouter)
