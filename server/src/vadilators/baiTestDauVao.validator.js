@@ -15,8 +15,15 @@ let validateCreateBaiTest = () => {
     ]; 
 }
 
+let validateDeleteBaiTest = () => {
+    return [
+        check('id', 'Thiếu id bài test').not().isEmpty()
+    ]
+}
+
 let validateBaiTest = {
-    validateCreateBaiTest: validateCreateBaiTest
+    validateCreateBaiTest: validateCreateBaiTest,
+    validateDeleteBaiTest:validateDeleteBaiTest
 };
   
 module.exports = {validateBaiTest};
