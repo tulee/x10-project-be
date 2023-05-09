@@ -18,8 +18,20 @@ class BaiTestDauVaoController {
         }
 
         let data = req.body
-        let result = baiTestDauVaoModel.create(data)
+        let ma_bai_test = data.ma_bai_test
+        let checkExisting = await baiTestDauVaoModel.getBaiTestByMaBaiTest(ma_bai_test)
+        if(checkExisting){
+          res.status(400).json({status:"false",data:[{
+              type: "field",
+              value: ma_bai_test,
+              msg: "Mã bài test đã tồn tại",
+              path: "ma_bai_test",
+              location: "body"
+            }], message:"Mã bài test đã tồn tại"})
+          return
+        }
 
+        let result = await baiTestDauVaoModel.create(data)
         res.status(200).json({status:"true", data:result, message:"Tạo bài test thành công"})
         return
       } catch (error) {

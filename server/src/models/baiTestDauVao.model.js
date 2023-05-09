@@ -7,6 +7,12 @@ class BaiTestDauVaoModel extends BaseModel {
         this.init("bai-test-dau-vao", BaiTestDauVaoSchema, "bai-test-dau-vao");
     }
 
+    
+    async getBaiTestByMaBaiTest(ma_bai_test){
+      const query = this.model.findOne({ma_bai_test: ma_bai_test});
+      return query.exec();
+    }
+
     async getBaiTest(term, viTri,page, perPage){
         try {
           const agg = [
