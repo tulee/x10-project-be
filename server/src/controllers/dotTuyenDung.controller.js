@@ -57,7 +57,6 @@ class DotTuyenDungController {
       if(!errors.isEmpty()){
         res.status(422).json({ errors: errors.array() });
         return
-        // res.send({status:"false", message:"Thiếu thông tin đợt tuyển dụng"})
       } else {
         let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
         if(new Date(data.ngay_bat_dau) <= new Date(ngay_ket_thuc_gan_nhat)){
@@ -75,7 +74,8 @@ class DotTuyenDungController {
           let resultDotTuyenDung = await dotTuyenDungModel.create(newDotTuyenDung)
   
           if(!resultDotTuyenDung._id){
-            res.send({status:"false", message:"Lỗi tạo đợt tuyển dụng"})
+            res.status(408).json({status:"false", message:"Lỗi khi tạo đợt tuyển dụng, xin vui lòng thử lại"})
+            return
           } else {
             const createAsyncDotTuyenDung_ViTri = async (info) => {
               let result = await dotTuyenDung_ViTriModel.create(info)
@@ -94,14 +94,18 @@ class DotTuyenDungController {
               })
             }
   
-            res.send({status:"true", message:"Tạo đợt tuyển dụng thành công"})
+            res.send({status:"true", data:resultDotTuyenDung, message:"Tạo đợt tuyển dụng thành công"})
           }
         }
       }
         
       } catch (error) {
         console.log(error);
-        res.send({status:"false", message:"Lỗi khi tạo đợt tuyển dụng"})
+        res.status(400).json({status:"false",data:{
+          errorName: error.name,
+          errorMsg : error.message
+        }, message:"Lỗi khi tạo đợt tuyển dụng"})
+        return
       }
     }
 
