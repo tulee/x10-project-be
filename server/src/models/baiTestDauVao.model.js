@@ -15,7 +15,7 @@ class BaiTestDauVaoModel extends BaseModel {
 
     async getBaiTest(term, viTri,page, perPage){
         try {
-          const agg = [
+          let agg = [
             {
               '$match': {
                 'ten_bai_test': {
@@ -25,7 +25,7 @@ class BaiTestDauVaoModel extends BaseModel {
               }
             }
           ]
-          const aggTerm = 
+          let aggTerm = 
               {
                 '$match': {
                   'ten_bai_test': {
@@ -40,7 +40,7 @@ class BaiTestDauVaoModel extends BaseModel {
           }
           
           if(viTri && viTri != ""){
-            const aggViTri = 
+            let aggViTri = 
               {
                   '$match': {
                     '$expr': {
@@ -52,6 +52,53 @@ class BaiTestDauVaoModel extends BaseModel {
                 }
             agg.push(aggViTri)
           }
+
+          let aggDetailViTri = [
+            {
+              '$unwind': {
+                'path': '$vi_tri'
+              }
+            }, {
+              '$lookup': {
+                'from': 'vi-tri', 
+                'localField': 'vi_tri', 
+                'foreignField': '_id', 
+                'as': 'vi_tri'
+              }
+            }, {
+              '$unwind': {
+                'path': '$vi_tri'
+              }
+            }, {
+              '$group': {
+                '_id': '$_id', 
+                'vi_tri': {
+                  '$push': '$vi_tri'
+                }
+              }
+            }, {
+              '$lookup': {
+                'from': 'bai-test-dau-vao', 
+                'localField': '_id', 
+                'foreignField': '_id', 
+                'as': 'detail'
+              }
+            }, {
+              '$unwind': {
+                'path': '$detail'
+              }
+            }, {
+              '$addFields': {
+                'detail.vi_tri': '$vi_tri'
+              }
+            }, {
+              '$replaceRoot': {
+                'newRoot': '$detail'
+              }
+            }
+          ]
+
+          agg = agg.concat(aggDetailViTri)
   
           let danhsach = await this.model
                                   .aggregate(agg)
