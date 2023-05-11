@@ -9,12 +9,7 @@ const cauHoiSchema = new mongoose.Schema({
         required: true
     },
     so_diem_cau_hoi:Number,
-    dap_an:[
-        {
-            ma_dap_an:String,
-            noi_dung:String
-        }
-    ],
-    dap_an_dung:String
+    dap_an:Array,
+    dap_an_dung:Array
 })
 module.exports = cauHoiSchema

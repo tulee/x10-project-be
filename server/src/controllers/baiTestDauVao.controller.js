@@ -1,7 +1,8 @@
 const baiTestDauVaoModel = require('../models/baiTestDauVao.model');
+const cauHoiModel = require('../models/cauHoi.model')
 const ungVienModel = require('../models/ungVien.model');
 const yeuCauUngTuyenModel = require('../models/yeuCauUngTuyen.model');
-const model = require('../models/baiTestDauVao.model');
+// const model = require('../models/baiTestDauVao.model');
 const { default: mongoose } = require("mongoose");
 const { validationResult } = require('express-validator');
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -31,11 +32,51 @@ class BaiTestDauVaoController {
           return
         }
 
-        data.ngay_tao_bai_test = new Date()
-        data.ngay_chinh_sua_gan_nhat = new Date()
+        let infoBaiTest = {
+          ma_bai_test:data.ma_bai_test,
+          mo_ta:data.mo_ta,
+          ngay_tao_bai_test: new Date(),
+          ngay_chinh_sua_gan_nhat: new Date(),
+          so_diem_toi_thieu:data.so_diem_toi_thieu,    
+          ten_bai_test:data.ten_bai_test,
+          thoi_luong:data.thoi_luong
+        }
 
-        let result = await baiTestDauVaoModel.create(data)
-        res.status(200).json({status:"true", data:result, message:"Tạo bài test thành công"})
+        let newBaiTest 
+        
+        try {
+          newBaiTest = await baiTestDauVaoModel.create(infoBaiTest)
+        } catch (error) {
+          throw error
+        }
+
+        let idBaiTest = newBaiTest._id
+
+        let danhSachCauHoi = data.danhSachCauHoi
+
+        const createAsyncCauHoi = async (info) => {
+          let result = await cauHoiModel.create(info)
+          return result
+        }
+
+        let newDanhSachCauHoi = []
+
+        try {
+          danhSachCauHoi.map(e => {
+            e.id_bai_test=idBaiTest
+            let res = createAsyncCauHoi(e)
+            newDanhSachCauHoi.push(res)
+          })
+        } catch (error) {
+          throw error
+        }
+
+        let resultTaoBaiTest = {
+          newBaiTest,
+          newDanhSachCauHoi
+        }
+
+        res.status(200).json({status:"true", data:resultTaoBaiTest, message:"Tạo bài test thành công"})
         return
       } catch (error) {
         console.log(error);
@@ -135,7 +176,7 @@ class BaiTestDauVaoController {
 
           let perPage = 3;
           let page = req.query.page || 1; 
-          let result = await model.getBaiTest(term,viTri,page, perPage)
+          let result = await baiTestDauVaoModel.getBaiTest(term,viTri,page, perPage)
           if(result.totalPages>0){
             return res.send({status:"true", data: result, message:"Tìm danh sách bài test thành công"})
           } else {

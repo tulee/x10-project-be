@@ -7,9 +7,11 @@ let validateCreateBaiTest = () => {
       check('so_diem_toi_thieu', 'Thiếu số điểm tối thiểu').not().isEmpty(),
       check('thoi_luong', 'Thiếu thời lượng').not().isEmpty(),
       check('vi_tri', 'Thiếu vị trí').not().isEmpty(),
+      check('danhSachCauHoi', 'Thiếu danh sách câu hỏi').not().isEmpty(),
       check('so_diem_toi_thieu', 'Số điểm tối thiểu phải là số dương').isNumeric({min:0}),
       check('thoi_luong', 'Thời lượng phải là số dương').isNumeric({min:0}),
       check('vi_tri', 'Vị trí phải là array').isArray(),
+      check('danhSachCauHoi','Danh sách câu hỏi phải là array').isArray(),
     ]; 
 }
 
