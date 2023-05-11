@@ -101,6 +101,8 @@ class BaiTestDauVaoController {
           return
         }
 
+        data.ngay_chinh_sua_gan_nhat = new Date()
+
         let result = await baiTestDauVaoModel.update(id, data)
         res.status(200).json({status:"true", data:result, message:"Cập nhật bài test thành công"})
         return
