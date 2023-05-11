@@ -31,6 +31,9 @@ class BaiTestDauVaoController {
           return
         }
 
+        data.ngay_tao_bai_test = new Date()
+        data.ngay_chinh_sua_gan_nhat = new Date()
+
         let result = await baiTestDauVaoModel.create(data)
         res.status(200).json({status:"true", data:result, message:"Tạo bài test thành công"})
         return
