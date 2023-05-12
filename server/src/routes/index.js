@@ -4,6 +4,7 @@ const yeuCauUngTuyenRouter = require('./yeuCauUngTuyen.route');
 const authRouter = require('./auth.route');
 const ungVienRouter = require('./ungVien.route');
 const baiTestDauVaoRouter = require('./baiTestDauVao.route');
+const cauHoiRouter = require('./cauHoi.route');
 const dotTuyenDungRouter = require('./dotTuyenDung.route');
 const authMiddleware = require('../middlewares/auth.middleware');
 const uploadRouter = require('./cloudinary.route');
@@ -12,6 +13,7 @@ const isAuth = authMiddleware.isAuth;
 function route(app){
     app.use('/vitri',viTriRouter)
     app.use('/mail',mailRouter)
+    app.use('/cauhoi',cauHoiRouter)
     app.use('/auth',authRouter)
     app.use('/yeucauungtuyen',yeuCauUngTuyenRouter)
     app.use('/baitest',baiTestDauVaoRouter)

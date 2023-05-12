@@ -108,9 +108,23 @@ class BaiTestDauVaoController {
           return
         }
 
-        let result = await baiTestDauVaoModel.delete(id)
-        res.status(200).json({status:"true", data:result, message:"Xóa bài test thành công"})
-        return
+        let danhSachCauHoi = await cauHoiModel.getAllByInfo({id_bai_test:new mongoose.Types.ObjectId(id)})
+
+        const asyncDeleteCauHoiById = async (id) => {
+          let res = await cauHoiModel.delete(id)
+          return res
+        }
+
+        try {
+          danhSachCauHoi.map(e => asyncDeleteCauHoiById(e._id))
+
+          let resultDeleteBaiTest = await baiTestDauVaoModel.delete(id)
+
+          res.status(200).json({status:"true", data:resultDeleteBaiTest, message:"Xóa bài test thành công"})
+          return
+        } catch (error) {
+          throw error
+        }
       } catch (error) {
           console.log(error);
             res.status(400).json({status:"false",data:{
@@ -145,6 +159,7 @@ class BaiTestDauVaoController {
         data.ngay_chinh_sua_gan_nhat = new Date()
 
         let result = await baiTestDauVaoModel.update(id, data)
+
         res.status(200).json({status:"true", data:result, message:"Cập nhật bài test thành công"})
         return
       } catch (error) {
