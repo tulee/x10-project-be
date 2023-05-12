@@ -8,10 +8,17 @@ let validateCreateBaiTest = () => {
       check('thoi_luong', 'Thiếu thời lượng').not().isEmpty(),
       check('vi_tri', 'Thiếu vị trí').not().isEmpty(),
       check('danhSachCauHoi', 'Thiếu danh sách câu hỏi').not().isEmpty(),
+      check('danhSachCauHoi.*.so_diem_cau_hoi', 'Thiếu số điểm câu hỏi').not().isEmpty(),
+      check('danhSachCauHoi.*.noi_dung', 'Thiếu nội dung câu hỏi').not().isEmpty(),
+      check('danhSachCauHoi.*.dap_an', 'Thiếu danh sách đáp án').not().isEmpty(),
+      check('danhSachCauHoi.*.dap_an_dung', 'Thiếu đáp án đúng của câu hỏi').not().isEmpty(),
       check('so_diem_toi_thieu', 'Số điểm tối thiểu phải là số dương').isNumeric({min:0}),
       check('thoi_luong', 'Thời lượng phải là số dương').isNumeric({min:0}),
       check('vi_tri', 'Vị trí phải là array').isArray(),
       check('danhSachCauHoi','Danh sách câu hỏi phải là array').isArray(),
+      check('danhSachCauHoi.*.so_diem_cau_hoi', 'Số điểm câu hỏi phải là định dạng số').isNumeric(),
+      check('danhSachCauHoi.*.dap_an', 'Danh sách đáp án phải là Array').isArray(),
+      check('danhSachCauHoi.*.dap_an_dung', 'Danh sách đáp án đúng phải là Array').isArray(),
     ]; 
 }
 
@@ -59,7 +66,10 @@ let validateUpdateBaiTest = () => {
 
 let validateNopBaiTest = () => {
     return [
-        check('idYeuCauUngTuyen', 'Thiếu id yêu cầu ứng tuyển').not().isEmpty()
+        check('idYeuCauUngTuyen', 'Thiếu id yêu cầu ứng tuyển').not().isEmpty(),
+        check('dsDapAnUngVien.*.dapAnUngVien', 'Thiếu đáp án ứng viên').not().isEmpty(),
+        check('dsDapAnUngVien.*.idCauHoi', 'Thiếu id câu hỏi').not().isEmpty(),
+        check('dsDapAnUngVien.*.dapAnUngVien', 'Đáp án ứng viên phải là Array').isArray()
     ]
 }
 
