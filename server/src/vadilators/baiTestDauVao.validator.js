@@ -57,10 +57,17 @@ let validateUpdateBaiTest = () => {
     ]
 }
 
+let validateNopBaiTest = () => {
+    return [
+        check('idYeuCauUngTuyen', 'Thiếu id yêu cầu ứng tuyển').not().isEmpty()
+    ]
+}
+
 let validateBaiTest = {
     validateCreateBaiTest: validateCreateBaiTest,
     validateDeleteBaiTest:validateDeleteBaiTest,
-    validateUpdateBaiTest:validateUpdateBaiTest
+    validateUpdateBaiTest:validateUpdateBaiTest,
+    validateNopBaiTest:validateNopBaiTest
 };
   
 module.exports = {validateBaiTest};

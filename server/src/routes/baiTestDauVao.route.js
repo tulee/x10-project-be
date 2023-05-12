@@ -7,7 +7,7 @@ router.get('/cauhoi', controller.getDanhSachCauHoi);
 router.delete('/',validateBaiTest.validateDeleteBaiTest(), controller.deleteBaiTest);
 router.put('/',validateBaiTest.validateUpdateBaiTest(), controller.updateBaiTest);
 router.post('/createbaitest',validateBaiTest.validateCreateBaiTest(), controller.createBaiTest);
-router.put('/nopbaitest', controller.nopBaiTest);
+router.put('/nopbaitest', validateBaiTest.validateNopBaiTest(), controller.nopBaiTest);
 router.get('/', controller.getBaiTest);
 
 module.exports = router;
