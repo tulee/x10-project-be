@@ -3,6 +3,7 @@ const dotTuyenDungModel = require('../models/dotTuyenDung.model');
 const yeuCauUngTuyenModel = require('../models/yeuCauUngTuyen.model');
 const dotTuyenDung_ViTriModel = require('../models/dotTuyenDung_ViTri.model');
 const { default: mongoose, model } = require("mongoose");
+const { validationResult } = require('express-validator');
 const cloudinary = require('cloudinary').v2;
 
 class UngVienController {
@@ -10,19 +11,33 @@ class UngVienController {
 
   ungTuyen = async (req, res, next) => {
     try {
+      if(!req.file){
+        res.status(400).json({ status:"false", message:"Lỗi khi upload CV, vui lòng thử lại, hãy đảm bảo bạn đã upload CV!" });
+        return
+      }
+
+      let filename = req.file.filename      
+
+      const errors = validationResult(req);
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi ứng tuyển" });
+          cloudinary.uploader.destroy(filename)
+          return
+        }
+
       const thongTinUngTuyen = req.body  
       console.log(req.file.filename);
-      let filename = req.file.filename  
-      if(!thongTinUngTuyen.ho_va_ten || !thongTinUngTuyen.email || !thongTinUngTuyen.id_dot_tuyen_dung || !thongTinUngTuyen.id_vi_tri || !req.file){
-        if(filename){
-          cloudinary.uploader.destroy(filename).then(
-            res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
-          );
-        }else {
-          res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
-        }
+      // let filename = req.file.filename  
+      // if(!thongTinUngTuyen.ho_va_ten || !thongTinUngTuyen.email || !thongTinUngTuyen.id_dot_tuyen_dung || !thongTinUngTuyen.id_vi_tri || !req.file){
+      //   if(filename){
+      //     cloudinary.uploader.destroy(filename).then(
+      //       res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
+      //     );
+      //   }else {
+      //     res.send({status:"false", message:"Thiếu thông tin ứng tuyển"})
+      //   }
         
-      } else {
+      // } else {
       let thongTinUngVien = {
         ho_va_ten: thongTinUngTuyen.ho_va_ten,
         gioi_tinh:thongTinUngTuyen.gioi_tinh,
@@ -38,25 +53,43 @@ class UngVienController {
         id_vi_tri:new mongoose.Types.ObjectId(thongTinUngTuyen.id_vi_tri)
       })
 
-      let id_dot_tuyen_dung_vi_tri
-
-      try {
-        id_dot_tuyen_dung_vi_tri = dot_tuyen_dung_vi_tri._id
-      } catch (err){
-        throw err
+      if(!dot_tuyen_dung_vi_tri){
+        res.status(400).json({ status:"false", message:"Đợt tuyển dụng không có vị trí này" });
+        cloudinary.uploader.destroy(filename)
+        return
       }
 
-      if(!id_dot_tuyen_dung_vi_tri){
-        cloudinary.uploader.destroy(filename).then(
-          res.send({status:"false", message:"Đợt tuyển dụng không có vị trí này"})
-        );
-      } else {
+      let id_dot_tuyen_dung_vi_tri = dot_tuyen_dung_vi_tri._id
+
+      // try {
+      //   id_dot_tuyen_dung_vi_tri = dot_tuyen_dung_vi_tri._id
+      // } catch (err){
+      //   throw err
+      // }
+
+      // if(!id_dot_tuyen_dung_vi_tri){
+      //   res.status(400).json({ status:"false", message:"Đợt tuyển dụng không có vị trí này" });
+      //   cloudinary.uploader.destroy(filename)
+      //   return
+      //   // cloudinary.uploader.destroy(filename).then(
+      //   //   res.send({status:"false", message:"Đợt tuyển dụng không có vị trí này"})
+      //   // );
+      // } else {
         let dotTuyenDung = await dotTuyenDungModel.getById(thongTinUngTuyen.id_dot_tuyen_dung)
 
+        if(!dotTuyenDung){
+          res.status(400).json({ status:"false", message:"Không tìm thấy đợt tuyển dụng với Id đã cho" });
+          cloudinary.uploader.destroy(filename)
+          return
+        }
+
         if(dotTuyenDung.ngay_ket_thuc < new Date()){
-          cloudinary.uploader.destroy(filename).then(
-            res.send({status:"false", message:"Đợt tuyển dụng đã kết thúc"})
-          );
+          res.status(400).json({ status:"false", message:"Đợt tuyển dụng đã kết thúc" });
+          cloudinary.uploader.destroy(filename)
+          return
+          // cloudinary.uploader.destroy(filename).then(
+          //   res.send({status:"false", message:"Đợt tuyển dụng đã kết thúc"})
+          // );
         } else {
           let thongTinYeuCauUngTuyen = {
             id_dot_tuyen_dung_vi_tri:id_dot_tuyen_dung_vi_tri,
@@ -112,14 +145,21 @@ class UngVienController {
               }
               res.send({status:"true", messgae:"Ứng tuyển thành công", data: result})
             }
-        } 
-      }
+        // } 
+      // }
     }
     } catch (error) {
       console.log(error);
-      cloudinary.uploader.destroy(filename).then(
-        res.send({status:"false", message:"Lỗi khi ứng tuyển"})
-      );
+      // let filename = req.file.filename  
+      // if(filename){
+      //   cloudinary.uploader.destroy(filename)   
+      // }   
+      res.status(400).json({status:"false",data:{
+        errorName: error.name,
+        errorMsg : error.message
+      }, message:"Lỗi khi ứng tuyển, vui lòng thử lại"})
+
+      return
     }
   }
   }

@@ -16,7 +16,7 @@ const UngVienSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    nam_sinh:String,
+    nam_sinh:Number,
     trang_thai:String,
     cv:String
 })
