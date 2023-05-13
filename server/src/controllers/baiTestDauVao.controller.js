@@ -221,6 +221,17 @@ class BaiTestDauVaoController {
         }], message:"Thiếu id bài test"})
         return
       }
+
+      if(!ObjectId.isValid(idBaiTest)){
+        res.status(400).json({status:"false",data:[{
+          type: "field",
+          value: idBaiTest,
+          msg: "Id bài test phải thuộc định dạng Mongo Object ID, có 24 kí tự",
+          path: "idbaitest",
+          location: "query"
+        }], message:"Id bài test phải thuộc định dạng Mongo Object ID, có 24 kí tự"})
+        return
+      }
       
       let result
 

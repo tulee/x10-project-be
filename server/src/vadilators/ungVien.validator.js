@@ -13,8 +13,8 @@ let validateUngTuyen = () => {
       check('sdt', 'Số điện thoại sai định dạng').isMobilePhone(),
       check('email', 'Email sai định dạng').isEmail(),
       check('nam_sinh', 'Năm sinh là số').isNumeric(),
-      check('id_dot_tuyen_dung', 'Id đợt tuyển dụng sai định dạng, phải là Mongo ObjectId').isLength(24),
-      check('id_vi_tri', 'Id vị trí sai định dạng, phải là Mongo ObjectId').isLength(24)
+      check('id_dot_tuyen_dung', 'Id đợt tuyển dụng sai định dạng, phải là Mongo ObjectId, có 24 kí tự').isLength(24),
+      check('id_vi_tri', 'Id vị trí sai định dạng, phải là Mongo ObjectId, có 24 kí tự').isLength(24)
     ]; 
 }
 
