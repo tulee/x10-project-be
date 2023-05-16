@@ -22,7 +22,7 @@ class DotTuyenDungController {
       try {
         let term = req.query.term
         let idViTri = req.query.vitri
-        let perPage = 15;
+        let perPage = req.query.perpage||15;
         let idDotTuyenDung = req.query.iddottuyendung
         let page = req.query.page || 1; 
 
