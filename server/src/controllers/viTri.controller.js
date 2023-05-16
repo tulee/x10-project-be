@@ -8,7 +8,7 @@ class ViTriController {
 
     getViTri = async (req, res) => {
       let term = req.query.term
-      let perPage = 3;
+      let perPage = 15;
       let page = req.query.page || 1; 
       let result = await viTriModel.getViTri(term,page, perPage)
       if(result.totalPages>0){

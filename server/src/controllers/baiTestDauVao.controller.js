@@ -189,7 +189,7 @@ class BaiTestDauVaoController {
             }
           }
 
-          let perPage = 3;
+          let perPage = 15;
           let page = req.query.page || 1; 
           let result = await baiTestDauVaoModel.getBaiTest(term,viTri,page, perPage)
           if(result.totalPages>0){
