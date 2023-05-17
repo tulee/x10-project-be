@@ -7,5 +7,6 @@ router.get('/danhsachungvien', controller.getDanhSachUngVienDotTuyenDung);
 router.post('/',validateDotTuyenDung.validateCreateDotTuyenDung(), controller.createDotTuyenDung);
 router.get('/', controller.getDotTuyenDung);
 router.put('/',validateDotTuyenDung.validateUpdateDotTuyenDung(), controller.updateDotTuyenDung);
+router.delete('/', controller.deleteDotTuyenDung);
 
 module.exports = router;

@@ -159,7 +159,41 @@ class DotTuyenDungController {
       }
     }
 
-    
+    deleteDotTuyenDung = async (req, res) => {
+      try {
+        let idList = req.body.idList
+        // if(!ObjectId.isValid(id)){
+        //   res.status(400).json({status:"false",data:[{
+        //     type: "field",
+        //     value: id,
+        //     msg: "Id phải ở định dạng Mongo Object Id",
+        //     path: "id",
+        //     location: "body"
+        //   }], message:"Id phải ở định dạng Mongo Object Id"})
+        //   return
+        // }
+
+        const asyncDeleteDotTuyenDung = async (id) => {
+          let res = await dotTuyenDungModel.delete(new mongoose.Types.ObjectId(id))
+          return res
+        }
+
+        try {
+          idList.map(e => asyncDeleteDotTuyenDung(e))
+        } catch (error) {
+          throw error
+        }
+        res.status(200).json({status:"true", message:"Xóa vị trí thành công"})
+        return
+      } catch (error) {
+        console.log(error);
+        res.status(400).json({status:"false",data:{
+          errorName: error.name,
+          errorMsg : error.message
+        }, message:"Lỗi khi xóa đợt tuyển dụng"})
+        return
+      }
+    }
   }
 
 module.exports = new DotTuyenDungController();
