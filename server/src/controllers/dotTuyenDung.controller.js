@@ -8,7 +8,7 @@ class DotTuyenDungController {
 
     getDotTuyenDung = async (req, res) => {
       let term = req.query.term
-      let perPage = 15;
+      let perPage = 1000;
       let page = req.query.page || 1; 
       let result = await dotTuyenDungModel.getDotTuyenDung(term,page, perPage)
       if(result.totalPages>0){
