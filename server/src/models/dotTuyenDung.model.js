@@ -97,6 +97,9 @@ class DotTuyenDungModel extends BaseModel {
               'ngay_chinh_sua_gan_nhat': {
                 '$first': '$ngay_chinh_sua_gan_nhat'
               }, 
+              'mo_ta_khac': {
+                '$first': "$mo_ta_khac",
+              },
               'vi_tri': {
                 '$push': {
                   'id_dot_tuyen_dung_vi_tri': '$vi_tri._id', 
