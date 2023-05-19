@@ -18,6 +18,33 @@ class DotTuyenDungController {
       }
     }
 
+    getDotTuyenDungDetail = async (req, res) => {
+      try {
+        let idDotTuyenDung = req.params.iddottuyendung
+
+        if(!idDotTuyenDung){
+          res.status(400).json({status:"false", message:"Thiếu id đợt tuyển dụng"})
+          return
+        }
+
+        try {
+          let result = await dotTuyenDungModel.getDotTuyenDungDetail(idDotTuyenDung)
+          
+          return res.send({status:"true", data: result, message:"Tìm chi tiết đợt tuyển dụng thành công"})
+
+        } catch (error) {
+          throw error
+        }
+      } catch (error) {
+        console.log(error);
+          res.status(400).json({status:"false",data:{
+            errorName: error.name,
+            errorMsg : error.message
+          }, message:"Lỗi khi tìm chi tiết đợt tuyển dụng"})
+        return
+      }
+    }
+
     getDanhSachUngVienDotTuyenDung = async (req,res) => {
       try {
         let term = req.query.term

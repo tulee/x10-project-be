@@ -54,6 +54,67 @@ class DotTuyenDungModel extends BaseModel {
         return {currentPage: page, totalPages: totalPages, danhsach:danhsach}
     }
 
+    async getDotTuyenDungDetail(idDotTuyenDung) {
+        const agg = [
+          {
+            '$match': {
+              '_id': new mongoose.Types.ObjectId(idDotTuyenDung)
+            }
+          }, {
+            '$lookup': {
+              'from': 'dot-tuyen-dung_vi-tri', 
+              'localField': '_id', 
+              'foreignField': 'id_dot_tuyen_dung', 
+              'as': 'vi_tri'
+            }
+          }, {
+            '$unwind': {
+              'path': '$vi_tri'
+            }
+          }, {
+            '$lookup': {
+              'from': 'vi-tri', 
+              'localField': 'vi_tri.id_vi_tri', 
+              'foreignField': '_id', 
+              'as': 'vi_tri.chi_tiet_vi_tri'
+            }
+          }, {
+            '$unwind': {
+              'path': '$vi_tri.chi_tiet_vi_tri'
+            }
+          }, {
+            '$group': {
+              '_id': '$_id', 
+              'ten': {
+                '$first': '$ten'
+              }, 
+              'ngay_bat_dau': {
+                '$first': '$ngay_bat_dau'
+              }, 
+              'ngay_ket_thuc': {
+                '$first': '$ngay_ket_thuc'
+              }, 
+              'ngay_chinh_sua_gan_nhat': {
+                '$first': '$ngay_chinh_sua_gan_nhat'
+              }, 
+              'vi_tri': {
+                '$push': {
+                  'id_dot_tuyen_dung_vi_tri': '$vi_tri._id', 
+                  'so_luong': '$vi_tri.so_luong', 
+                  'ten_vi_tri': '$vi_tri.chi_tiet_vi_tri.ten_vi_tri', 
+                  'ma_vi_tri': '$vi_tri.chi_tiet_vi_tri.ma_vi_tri', 
+                  'mo_ta': '$vi_tri.chi_tiet_vi_tri.mo_ta'
+                }
+              }
+            }
+          }
+        ]
+
+        let danhsach = await this.model.aggregate(agg).exec()
+
+        return ({danhsach:danhsach})
+    }
+
     async getDanhSachUngVien(idDotTuyenDung, term, idViTri, page, perPage){
         const agg = [
           {

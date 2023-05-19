@@ -5,6 +5,7 @@ const { validateDotTuyenDung } = require("../vadilators/dotTuyenDung.validator")
 
 router.get('/danhsachungvien', controller.getDanhSachUngVienDotTuyenDung);
 router.post('/',validateDotTuyenDung.validateCreateDotTuyenDung(), controller.createDotTuyenDung);
+router.get('/:iddottuyendung', controller.getDotTuyenDungDetail);
 router.get('/', controller.getDotTuyenDung);
 router.put('/',validateDotTuyenDung.validateUpdateDotTuyenDung(), controller.updateDotTuyenDung);
 router.delete('/', controller.deleteDotTuyenDung);
