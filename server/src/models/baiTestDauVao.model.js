@@ -26,8 +26,8 @@ class BaiTestDauVaoModel extends BaseModel {
         }
       ]
 
-
       if (term && term != "") {
+        console.log("add term");
         let aggTerm =
         {
           '$match': {
@@ -41,6 +41,7 @@ class BaiTestDauVaoModel extends BaseModel {
       }
 
       if (viTri && viTri != "") {
+        console.log("add vi tri");
         let aggViTri =
         {
           '$match': {
@@ -104,10 +105,12 @@ class BaiTestDauVaoModel extends BaseModel {
       let danhsach = await this.model
         .aggregate(agg)
         .exec()
+      console.log(danhsach);
       let totalPages = Math.ceil(danhsach.length / perPage)
       let start = (perPage * page) - perPage
       let end = start + perPage
       danhsach = danhsach.slice(start, end)
+      console.log(danhsach);
       return { currentPage: page, totalPages: totalPages, danhsach: danhsach }
     } catch (error) {
       throw error

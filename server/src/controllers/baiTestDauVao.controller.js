@@ -39,7 +39,8 @@ class BaiTestDauVaoController {
           ngay_chinh_sua_gan_nhat: new Date(),
           so_diem_toi_thieu:data.so_diem_toi_thieu,    
           ten_bai_test:data.ten_bai_test,
-          thoi_luong:data.thoi_luong
+          thoi_luong:data.thoi_luong,
+          vi_tri:data.vi_tri
         }
 
         let newBaiTest 
