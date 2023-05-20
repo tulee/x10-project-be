@@ -118,7 +118,7 @@ class BaiTestDauVaoModel extends BaseModel {
     }
   }
 
-  async danhSachCauHoi(idBaiTest) {
+  async chiTietBaiTest(idBaiTest) {
     let agg = [
       {
         '$match': {
@@ -131,19 +131,23 @@ class BaiTestDauVaoModel extends BaseModel {
           'foreignField': 'id_bai_test',
           'as': 'cau_hoi'
         }
-      }, {
-        '$project': {
-          '_id': 1,
-          'ma_bai_test': 1,
-          'so_diem_toi_thieu': 1,
-          'ten_bai_test': 1,
-          'thoi_luong': 1,
-          'cau_hoi._id': 1,
-          'cau_hoi.so_diem_cau_hoi': 1,
-          'cau_hoi.noi_dung': 1,
-          'cau_hoi.dap_an': 1
-        }
       }
+      // , {
+      //   '$project': {
+      //     '_id': 1,
+      //     'ma_bai_test': 1,
+      //     'mo_ta':1,
+      //     'ngay_chinh_sua_gan_nhat':1,
+      //     'ngay_tao_bai_test':1,
+      //     'so_diem_toi_thieu': 1,
+      //     'ten_bai_test': 1,
+      //     'thoi_luong': 1,
+      //     'cau_hoi._id': 1,
+      //     'cau_hoi.so_diem_cau_hoi': 1,
+      //     'cau_hoi.noi_dung': 1,
+      //     'cau_hoi.dap_an': 1
+      //   }
+      // }
     ]
 
     let result = await this.model.aggregate(agg).exec()

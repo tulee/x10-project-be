@@ -3,7 +3,7 @@ const router = exp.Router();
 const controller = require('../controllers/baiTestDauVao.controller');
 const { validateBaiTest } = require("../vadilators/baiTestDauVao.validator");
 
-router.get('/cauhoi', controller.getDanhSachCauHoi);
+router.get('/chitiet', controller.getChiTietBaiTest);
 router.delete('/',validateBaiTest.validateDeleteBaiTest(), controller.deleteBaiTest);
 router.put('/',validateBaiTest.validateUpdateBaiTest(), controller.updateBaiTest);
 router.post('/createbaitest',validateBaiTest.validateCreateBaiTest(), controller.createBaiTest);

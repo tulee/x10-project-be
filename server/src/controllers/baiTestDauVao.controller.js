@@ -209,7 +209,7 @@ class BaiTestDauVaoController {
         }
   }
 
-  getDanhSachCauHoi = async (req,res) => {
+  getChiTietBaiTest = async (req,res) => {
     try {
       let idBaiTest = req.query.idbaitest
       if(!idBaiTest){
@@ -237,7 +237,7 @@ class BaiTestDauVaoController {
       let result
 
       try {
-        result = await baiTestDauVaoModel.danhSachCauHoi(idBaiTest)
+        result = await baiTestDauVaoModel.chiTietBaiTest(idBaiTest)
       } catch (error) {
         throw error
       }
