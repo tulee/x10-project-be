@@ -188,7 +188,8 @@ class DotTuyenDungModel extends BaseModel {
                   'thoi_gian_pv': '$yeu_cau_ung_tuyen.thoi_gian_pv', 
                   'nguoi_pv': '$yeu_cau_ung_tuyen.nguoi_pv', 
                   'ket_qua_pv': '$yeu_cau_ung_tuyen.ket_qua_pv', 
-                  'ngay_nhan_viec': '$yeu_cau_ung_tuyen.ngay_nhan_viec'
+                  'ngay_nhan_viec': '$yeu_cau_ung_tuyen.ngay_nhan_viec',
+                  'cv':'$ung_vien.cv'
                 }
               }
             }
