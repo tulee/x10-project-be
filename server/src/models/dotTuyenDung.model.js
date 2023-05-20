@@ -103,7 +103,7 @@ class DotTuyenDungModel extends BaseModel {
               'vi_tri': {
                 '$push': {
                   'id_dot_tuyen_dung_vi_tri': '$vi_tri._id', 
-                  'id_vi_tri':'$vi_tri._id',
+                  'id_vi_tri':'$vi_tri.id_vi_tri',
                   'so_luong': '$vi_tri.so_luong', 
                   'ten_vi_tri': '$vi_tri.chi_tiet_vi_tri.ten_vi_tri', 
                   'ma_vi_tri': '$vi_tri.chi_tiet_vi_tri.ma_vi_tri', 
