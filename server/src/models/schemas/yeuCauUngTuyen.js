@@ -10,6 +10,7 @@ const YeuCauUngTuyenSchema = new mongoose.Schema({
         required: true
     },
     diem_lam_test_dau_vao:Number,
+    thoi_gian_lam_test:Date,
     trang_thai:String,
     hinh_thuc_pv:String,
     thoi_gian_pv:Date,
