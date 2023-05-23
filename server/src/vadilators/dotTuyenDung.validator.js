@@ -14,7 +14,7 @@ let validateCreateDotTuyenDung = () => {
 
 let validateUpdateDotTuyenDung = () => {
   return [ 
-    check('idDotTuyenDung', 'Thiếu Id đợt tuyển dụng').not().isEmpty(),
+    check('id_dot_tuyen_dung', 'Thiếu Id đợt tuyển dụng').not().isEmpty(),
     check('ten', 'Thiếu tên đợt tuyển dụng').if(body('ten').exists()).not().isEmpty(),
     check('vi_tri', 'Thiếu vị trí').if(body('vi_tri').exists()).not().isEmpty(),
     check('ngay_bat_dau', 'Thiếu ngày bắt đầu').if(body('ngay_bat_dau').exists()).not().isEmpty(),
