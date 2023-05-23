@@ -159,12 +159,6 @@ class DotTuyenDungController {
         res.status(400).json({ status: "false", data: errors.array(), message: "Lỗi khi cập nhật đợt tuyển dụng" });
         return
       } else {
-        // let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
-
-        // if (new Date(data.ngay_bat_dau) <= new Date(ngay_ket_thuc_gan_nhat)) {
-        //   res.status(400).json({ status: "false", message: `Đợt tuyển dụng trước chưa kết thúc, ngày kết thúc gần nhất là: ${ngay_ket_thuc_gan_nhat}` })
-        //   return
-        // } else {
 
           let updatedData = {
             ten: data.ten,
@@ -181,7 +175,7 @@ class DotTuyenDungController {
             id_vi_tri: e.id_vi_tri
           }))
 
-          let existingViTri = await dotTuyenDung_ViTriModel.getAllByInfo({ id_dot_tuyen_dung: data.idDotTuyenDung })
+          let existingViTri = await dotTuyenDung_ViTriModel.getAllByInfo({ id_dot_tuyen_dung: data.id_dot_tuyen_dung })
 
           console.log(existingViTri);
 
@@ -204,12 +198,12 @@ class DotTuyenDungController {
           try {
             await asyncDeleteDotTuyenDung_ViTri(existingViTri)
             await asyncCreateDotTuyenDung_ViTri(danhSachViTri)
+            await dotTuyenDungModel.update(data.id_dot_tuyen_dung, updatedData)
           } catch (error) {
             throw error
           }
 
           res.send({ status: "true", message: "Cập nhật đợt tuyển dụng thành công" })
-        // }
       }
 
     } catch (error) {
