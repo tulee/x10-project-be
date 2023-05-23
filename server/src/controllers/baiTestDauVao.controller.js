@@ -144,6 +144,82 @@ class BaiTestDauVaoController {
           return
         }
 
+        let data = req.body
+
+        // if(!ObjectId.isValid(data.id_bai_test)){
+        //   res.status(400).json({status:"false",data:[{
+        //     type: "field",
+        //     value: id_bai_test,
+        //     msg: "Id bài test phải ở định dạng Mongo Object Id",
+        //     path: "id_bai_test",
+        //     location: "body"
+        //   }], message:"Id bài test phải ở định dạng Mongo Object Id"})
+        //   return
+        // }
+
+        data.ngay_chinh_sua_gan_nhat = new Date()
+
+        let newInfoBaiTest = {
+          ma_bai_test:data.ma_bai_test,
+          ten_bai_test:data.ten_bai_test,
+          thoi_luong:data.thoi_luong,
+          mo_ta:data.mo_ta,
+          ngay_tao_bai_test:data.ngay_tao_bai_test,
+          so_diem_toi_thieu:data.so_diem_toi_thieu,
+          vi_tri:data.vi_tri
+        }
+
+        let resultUpdateInfoBaiTest = await baiTestDauVaoModel.update(data.id_bai_test, newInfoBaiTest)
+
+        let danhSachCauHoi = data.cau_hoi
+        let existingCauHoi
+
+        try {
+          existingCauHoi = await cauHoiModel.getAllByInfo({id_bai_test:data.id_bai_test})
+        } catch (error) {
+          throw error
+        }
+
+        async function asyncDeleteCauHoi(data) {
+          let promises = data.map(async (e) => {
+            return await cauHoiModel.delete(e._id)
+          })
+          return await Promise.all(promises)
+        }
+        async function asyncCreateCauHoi(data) {
+          let promises = data.map(async (e) => {
+            return await cauHoiModel.create(e)
+          })
+          return await Promise.all(promises)
+        }
+
+        try {
+          await asyncDeleteCauHoi(existingCauHoi)
+          await asyncCreateCauHoi(danhSachCauHoi)
+        } catch (error) {
+          throw error
+        }
+
+        res.status(200).json({status:"true", message:"Cập nhật bài test thành công"})
+        return
+      } catch (error) {
+          console.log(error);
+            res.status(400).json({status:"false",data:{
+              errorName: error.name,
+              errorMsg : error.message
+            }, message:"Lỗi khi cập nhật bài test"})
+            return
+        }
+    }
+
+    updateThongTinBaiTest = async(req,res) => {
+      try {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+          res.status(400).json({ status:"false", data: errors.array(), message:"Lỗi khi cập nhật bài test" });
+          return
+        }
+
         let id = req.body.id
         let data = req.body.data
         if(!ObjectId.isValid(id)){
