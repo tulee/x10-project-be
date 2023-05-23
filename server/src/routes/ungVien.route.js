@@ -5,5 +5,6 @@ const fileUploader = require('../config/cloudinary');
 const { validateUngVien } = require("../vadilators/ungVien.validator");
 
 router.post('/', fileUploader.single('file'), validateUngVien.validateUngTuyen(), controller.ungTuyen);
+router.get('/',  controller.danhSachUngVien);
 
 module.exports = router;

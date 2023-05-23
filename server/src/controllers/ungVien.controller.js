@@ -9,6 +9,29 @@ const cloudinary = require('cloudinary').v2;
 class UngVienController {
   constructor() {}
 
+  danhSachUngVien = async (req, res, next) => {
+    try {
+      let term = req.query.term
+      let perPage = req.query.perpage||1000;
+      let page = req.query.page || 1; 
+      let result = await ungVienModel.getDanhSachUngVien(term,page, perPage)
+      if(result.totalPages>0){
+        res.send({status:"true", data: result, message:"Tìm vị trí thành công"})
+      } else {
+        res.status(404).json({status:"false", message:"Không tìm thấy đợt tuyển dụng"})
+        return
+      }
+    } catch (error) {
+      console.log(error); 
+      res.status(400).json({status:"false",data:{
+        errorName: error.name,
+        errorMsg : error.message
+      }, message:"Lỗi khi load danh sách ứng viên, vui lòng thử lại"})
+
+      return
+    }
+  }
+
   ungTuyen = async (req, res, next) => {
     try {
       if(!req.file){
