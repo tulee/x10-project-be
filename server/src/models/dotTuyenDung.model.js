@@ -175,6 +175,7 @@ class DotTuyenDungModel extends BaseModel {
               'ung_vien': {
                 '$push': {
                   'id_ung_vien': '$ung_vien._id', 
+                  'id_yeu_cau_ung_tuyen':"$yeu_cau_ung_tuyen._id",
                   'ho_va_ten': '$ung_vien.ho_va_ten', 
                   'gioi_tinh': '$ung_vien.gioi_tinh', 
                   'nam_sinh': '$ung_vien.nam_sinh', 
