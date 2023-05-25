@@ -41,7 +41,9 @@ class YeuCauUngTuyenController {
         let ket_qua_pv = data.ket_qua_pv
         if (ket_qua_pv == "Đậu") {
           try {
-            await yeuCauUngTuyenModel.update(data._id, { ket_qua_pv: ket_qua_pv })
+            await yeuCauUngTuyenModel.update(data._id, { ket_qua_pv: ket_qua_pv, trang_thai:"Đang ứng tuyển" })
+            let id_ung_vien = yeuCauUngTuyen.id_ung_vien
+            await ungVienModel.update(id_ung_vien, { trang_thai: "Đang ứng tuyển" })
           } catch (error) {
             throw error
           }
