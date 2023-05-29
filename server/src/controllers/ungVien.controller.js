@@ -16,9 +16,9 @@ class UngVienController {
       let page = req.query.page || 1; 
       let result = await ungVienModel.getDanhSachUngVien(term,page, perPage)
       if(result.totalPages>0){
-        res.send({status:"true", data: result, message:"Tìm vị trí thành công"})
+        res.send({status:"true", data: result, message:"Tìm ứng viên thành công"})
       } else {
-        res.status(404).json({status:"false", message:"Không tìm thấy đợt tuyển dụng"})
+        res.status(404).json({status:"false", message:"Không tìm thấy ứng viên"})
         return
       }
     } catch (error) {

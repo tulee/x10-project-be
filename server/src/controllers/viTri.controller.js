@@ -6,6 +6,52 @@ const ObjectId = require('mongoose').Types.ObjectId;
 class ViTriController {
     constructor() {}
 
+    getViTriById = async (req, res) => {
+      try {
+        let id = req.query.id
+
+        if(!id){
+          res.status(400).json({status:"false",data:[{
+            type: "field",
+            value: id,
+            msg: "Thiếu id vị trí",
+            path: "id",
+            location: "query"
+          }], message:"Thiếu id vị trí"})
+          return
+        }
+
+        if(!ObjectId.isValid(id)){
+          res.status(400).json({status:"false",data:[{
+            type: "field",
+            value: id,
+            msg: "Id phải ở định dạng Mongo Object Id",
+            path: "id",
+            location: "query"
+          }], message:"Id phải ở định dạng Mongo Object Id"})
+          return
+        } 
+        
+        let result = await viTriModel.getById(id)
+
+        if(!result){
+          res.status(404).json({status:"false", message:`Không tìm thấy vị trí với id: ${id}`})
+          return
+        } else {
+          res.status(200).json({status:"true", data:result, message:`Tìm vị trí thành công`})
+          return
+        }
+
+      } catch (error) {
+        console.log(error);
+        res.status(400).json({status:"false",data:{
+          errorName: error.name,
+          errorMsg : error.message
+        }, message:"Lỗi khi tìm vị trí"})
+        return
+      }
+    } 
+
     getViTri = async (req, res) => {
       let term = req.query.term
       let perPage = req.query.perpage||1000;
@@ -18,6 +64,8 @@ class ViTriController {
         return
       }
     }
+
+
 
     createViTri = async (req,res) => {
       try {
