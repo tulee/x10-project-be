@@ -27,7 +27,26 @@ class UngVienController {
         errorName: error.name,
         errorMsg : error.message
       }, message:"Lỗi khi load danh sách ứng viên, vui lòng thử lại"})
+      return
+    }
+  }
 
+  capNhatUngVien = async (req, res, next) => {
+    try {
+      let data = req.body
+
+      try {
+        let result  = await ungVienModel.update(data._id, data)
+        res.send({status:"true", data:result,message:"Cập nhật ứng viên thành công"})
+      } catch (error) {
+        throw error
+      }
+    } catch (error) {
+      console.log(error); 
+      res.status(400).json({status:"false",data:{
+        errorName: error.name,
+        errorMsg : error.message
+      }, message:"Lỗi khi cập nhật ứng viên, vui lòng thử lại"})
       return
     }
   }
