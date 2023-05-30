@@ -37,6 +37,7 @@ class UngVienController {
 
       try {
         let result  = await ungVienModel.update(data._id, data)
+        await yeuCauUngTuyenModel.findAndUpdate({id_ung_vien:data._id},{trang_thai:data.trang_thai})
         res.send({status:"true", data:result,message:"Cập nhật ứng viên thành công"})
       } catch (error) {
         throw error
