@@ -73,7 +73,7 @@ class AuthController {
             msg: "Tên đăng nhập không tồn tại",
             path: "username",
             location: "body"
-          }], message:"Lỗi khi đăng nhập"})
+          }], message:"Tên đăng nhập không tồn tại"})
 
           return
         }
