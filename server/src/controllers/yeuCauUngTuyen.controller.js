@@ -29,6 +29,10 @@ class YeuCauUngTuyenController {
         updatedData.thoi_gian_lam_test = data.thoi_gian_lam_test
       }
 
+      if(yeuCauUngTuyen.id_bai_test != data.id_bai_test){
+        updatedData.id_bai_test = data.id_bai_test
+      }
+
       if(yeuCauUngTuyen.hinh_thuc_pv != data.hinh_thuc_pv){
         updatedData.hinh_thuc_pv = data.hinh_thuc_pv
       }
