@@ -48,6 +48,36 @@ class DotTuyenDungController {
     }
   }
 
+  getLastedDotTuyenDungDetail = async (req, res) => {
+    try {
+      let lastedDotTuyenDung = await dotTuyenDungModel.getLastedDotTuyenDung()
+      let idDotTuyenDung = await lastedDotTuyenDung._id
+
+      // if (!idDotTuyenDung) {
+      //   res.status(400).json({ status: "false", message: "Thiếu id đợt tuyển dụng" })
+      //   return
+      // }
+
+      try {
+        let result = await dotTuyenDungModel.getDotTuyenDungDetail(idDotTuyenDung)
+
+        return res.send({ status: "true", data: result, message: "Tìm chi tiết đợt tuyển dụng gần nhất thành công" })
+
+      } catch (error) {
+        throw error
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        status: "false", data: {
+          errorName: error.name,
+          errorMsg: error.message
+        }, message: "Lỗi khi tìm chi tiết đợt tuyển dụng gần nhất"
+      })
+      return
+    }
+  }
+
   getDanhSachUngVienDotTuyenDung = async (req, res) => {
     try {
       let term = req.query.term
@@ -96,7 +126,8 @@ class DotTuyenDungController {
         res.status(400).json({ status: "false", data: errors.array(), message: "Lỗi khi tạo đợt tuyển dụng" });
         return
       } else {
-        let ngay_ket_thuc_gan_nhat = await dotTuyenDungModel.getLastedDotTuyenDung()
+        let lastedDotTuyenDung = await dotTuyenDungModel.getLastedDotTuyenDung()
+        let ngay_ket_thuc_gan_nhat = await lastedDotTuyenDung.ngay_ket_thuc
         if (new Date(data.ngay_bat_dau) <= new Date(ngay_ket_thuc_gan_nhat)) {
           res.status(400).json({ status: "false", message: `Đợt tuyển dụng trước chưa kết thúc, ngày kết thúc gần nhất là: ${ngay_ket_thuc_gan_nhat}` })
           return
@@ -160,50 +191,50 @@ class DotTuyenDungController {
         return
       } else {
 
-          let updatedData = {
-            ten: data.ten,
-            ngay_bat_dau: data.ngay_bat_dau,
-            ngay_ket_thuc: data.ngay_ket_thuc,
-            ngay_chỉnh_sua_gan_nhat: new Date(),
-            mo_ta_khac: data.mo_ta_khac
-          }
+        let updatedData = {
+          ten: data.ten,
+          ngay_bat_dau: data.ngay_bat_dau,
+          ngay_ket_thuc: data.ngay_ket_thuc,
+          ngay_chỉnh_sua_gan_nhat: new Date(),
+          mo_ta_khac: data.mo_ta_khac
+        }
 
-          let danhSachViTri = data.vi_tri.map(e => ({
-            _id: e.id_dot_tuyen_dung_vi_tri,
-            id_dot_tuyen_dung: e.id_dot_tuyen_dung,
-            so_luong: e.so_luong,
-            id_vi_tri: e.id_vi_tri
-          }))
+        let danhSachViTri = data.vi_tri.map(e => ({
+          _id: e.id_dot_tuyen_dung_vi_tri,
+          id_dot_tuyen_dung: e.id_dot_tuyen_dung,
+          so_luong: e.so_luong,
+          id_vi_tri: e.id_vi_tri
+        }))
 
-          let existingViTri = await dotTuyenDung_ViTriModel.getAllByInfo({ id_dot_tuyen_dung: data.id_dot_tuyen_dung })
+        let existingViTri = await dotTuyenDung_ViTriModel.getAllByInfo({ id_dot_tuyen_dung: data.id_dot_tuyen_dung })
 
-          console.log(existingViTri);
+        console.log(existingViTri);
 
-          async function asyncDeleteDotTuyenDung_ViTri(data) {
-            let promises = data.map(async (e) => {
-              return await dotTuyenDung_ViTriModel.delete(e._id)
-            })
+        async function asyncDeleteDotTuyenDung_ViTri(data) {
+          let promises = data.map(async (e) => {
+            return await dotTuyenDung_ViTriModel.delete(e._id)
+          })
 
-            return await Promise.all(promises)
-          }
+          return await Promise.all(promises)
+        }
 
-          async function asyncCreateDotTuyenDung_ViTri(data) {
-            let promises = data.map(async (e) => {
-              return await dotTuyenDung_ViTriModel.create(e)
-            })
+        async function asyncCreateDotTuyenDung_ViTri(data) {
+          let promises = data.map(async (e) => {
+            return await dotTuyenDung_ViTriModel.create(e)
+          })
 
-            return await Promise.all(promises)
-          }
+          return await Promise.all(promises)
+        }
 
-          try {
-            await asyncDeleteDotTuyenDung_ViTri(existingViTri)
-            await asyncCreateDotTuyenDung_ViTri(danhSachViTri)
-            await dotTuyenDungModel.update(data.id_dot_tuyen_dung, updatedData)
-          } catch (error) {
-            throw error
-          }
+        try {
+          await asyncDeleteDotTuyenDung_ViTri(existingViTri)
+          await asyncCreateDotTuyenDung_ViTri(danhSachViTri)
+          await dotTuyenDungModel.update(data.id_dot_tuyen_dung, updatedData)
+        } catch (error) {
+          throw error
+        }
 
-          res.send({ status: "true", message: "Cập nhật đợt tuyển dụng thành công" })
+        res.send({ status: "true", message: "Cập nhật đợt tuyển dụng thành công" })
       }
 
     } catch (error) {

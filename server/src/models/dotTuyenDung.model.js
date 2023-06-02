@@ -18,7 +18,7 @@ class DotTuyenDungModel extends BaseModel {
 
       let sortedList = await this.model.aggregate(aggSort).exec()
 
-      return sortedList[0].ngay_ket_thuc
+      return sortedList[0]
     }
 
     async getDotTuyenDung(term, page, perPage){
