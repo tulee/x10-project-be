@@ -134,8 +134,8 @@ class DotTuyenDungModel extends BaseModel {
             }
           }, {
             '$unwind': {
-              'path': '$dot_tuyen_dung_vi_tri', 
-              'preserveNullAndEmptyArrays': true
+              'path': '$dot_tuyen_dung_vi_tri'
+              // 'preserveNullAndEmptyArrays': true
             }
           }, {
             '$lookup': {
@@ -146,8 +146,8 @@ class DotTuyenDungModel extends BaseModel {
             }
           }, {
             '$unwind': {
-              'path': '$yeu_cau_ung_tuyen', 
-              'preserveNullAndEmptyArrays': true
+              'path': '$yeu_cau_ung_tuyen'
+              // 'preserveNullAndEmptyArrays': true
             }
           }, {
             '$lookup': {
@@ -158,8 +158,8 @@ class DotTuyenDungModel extends BaseModel {
             }
           }, {
             '$unwind': {
-              'path': '$ung_vien', 
-              'preserveNullAndEmptyArrays': true
+              'path': '$ung_vien'
+              // 'preserveNullAndEmptyArrays': true
             }
           }, {
             '$lookup': {
@@ -170,8 +170,8 @@ class DotTuyenDungModel extends BaseModel {
             }
           }, {
             '$unwind': {
-              'path': '$ten_vi_tri', 
-              'preserveNullAndEmptyArrays': true
+              'path': '$ten_vi_tri'
+              // 'preserveNullAndEmptyArrays': true
             }
           }, {
             '$lookup': {
