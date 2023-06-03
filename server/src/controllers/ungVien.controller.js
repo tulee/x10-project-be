@@ -153,6 +153,7 @@ class UngVienController {
           })
     
           // res.send(checkExistingUngVien)
+          let result
     
           if(checkExistingUngVien){
               await ungVienModel.update(checkExistingUngVien._id,thongTinUngVien)
@@ -164,7 +165,7 @@ class UngVienController {
         
               thongTinYeuCauUngTuyen.id_ung_vien = checkExistingUngVien._id
               
-              let result = {
+              result = {
                 ungVien:checkExistingUngVien
               }
   
